@@ -295,9 +295,9 @@ def get_model_metadata():
             "inference_physics_enforcement": "Hydrostatic monotonicity clamp on evaluation",
             "output_depths_m": STANDARD_DEPTHS,
         },
-        "active_checkpoint": "C:/adrishta-66/checkpoints/oceanembed_multiyear_physics.pt",
-        "physics_checkpoint": "C:/adrishta-66/checkpoints/oceanembed_multiyear_physics.pt",
-        "baseline_checkpoint": "C:/adrishta-66/checkpoints/oceanembed_multiyear_baseline.pt",
+        "active_checkpoint": "checkpoints/oceanembed_multiyear_physics.pt",
+        "physics_checkpoint": "checkpoints/oceanembed_multiyear_physics.pt",
+        "baseline_checkpoint": "checkpoints/oceanembed_multiyear_baseline.pt",
         "normalization_file": "pipeline/norm_stats_multiyear.json",
         "dataset_governance": {
             "training_partition": "2024 (Weekly synoptic snapshots, 1.28M full-depth soundings)",

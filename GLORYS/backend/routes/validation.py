@@ -25,20 +25,27 @@ router = APIRouter()
 def _resolve_data_path(filename: str) -> Path:
     candidates = [
         Path(os.getenv("ARGO_DATA_DIR", "")) / filename,
-        Path("G:/My Drive/oceanembed_data/argo") / filename,
         Path("/tmp/oceanembed_data/argo") / filename,
-        Path(f"C:/adrishta-66/data/argo/{filename}"),
+        Path("/tmp/oceanembed_data") / filename,
+        Path("/app/data/argo") / filename,
         Path(f"data/argo/{filename}"),
+        Path(f"C:/adrishta-66/data/argo/{filename}"),
+        Path("G:/My Drive/oceanembed_data/argo") / filename,
     ]
     for c in candidates:
         if c and c.is_file():
             return c
-    return Path(f"C:/adrishta-66/data/argo/{filename}")
+    return Path("/tmp/oceanembed_data/argo") / filename if os.name != "nt" else Path(f"C:/adrishta-66/data/argo/{filename}")
 
 
-PATH_HISTORICAL_COLLOCATION = _resolve_data_path("collocation_results.json")
-PATH_FORWARD_PROFILES = _resolve_data_path("forward_validation_20260928.json")
-PATH_FORWARD_SUMMARY = _resolve_data_path("forward_validation_summary_20260928.json")
+def __getattr__(name: str) -> Path:
+    if name == "PATH_HISTORICAL_COLLOCATION":
+        return _resolve_data_path("collocation_results.json")
+    elif name == "PATH_FORWARD_PROFILES":
+        return _resolve_data_path("forward_validation_20260928.json")
+    elif name == "PATH_FORWARD_SUMMARY":
+        return _resolve_data_path("forward_validation_summary_20260928.json")
+    raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
 
 
 def _haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:

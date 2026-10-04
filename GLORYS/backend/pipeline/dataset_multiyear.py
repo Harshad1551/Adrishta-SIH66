@@ -65,9 +65,15 @@ class OceanEmbedMultiyearDataset(Dataset):
 
         # 1. Load Normalization Statistics
         if not self.stats_path.exists():
-            local_stats = Path(r"C:\adrishta-66\pipeline\norm_stats_multiyear.json")
-            if local_stats.exists():
-                self.stats_path = local_stats
+            for c in [
+                Path("pipeline/norm_stats_multiyear.json"),
+                Path("/app/pipeline/norm_stats_multiyear.json"),
+                Path("/tmp/oceanembed_data/norm_stats_multiyear.json"),
+                Path(r"C:\adrishta-66\pipeline\norm_stats_multiyear.json"),
+            ]:
+                if c.exists():
+                    self.stats_path = c
+                    break
 
         with open(str(self.stats_path), "r", encoding="utf-8") as f:
             self.stats = json.load(f)

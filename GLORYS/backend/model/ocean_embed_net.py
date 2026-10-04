@@ -119,9 +119,11 @@ def get_model(model_type: str = "physics") -> OceanEmbedNet:
             model = OceanEmbedNet(apply_physics_clamp=True)
             raw_candidates = [
                 os.getenv("OCEANEMBED_CHECKPOINT_PATH"),
+                "/app/checkpoints/oceanembed_multiyear_physics.pt",
+                "checkpoints/oceanembed_multiyear_physics.pt",
+                "/tmp/oceanembed_data/checkpoints/oceanembed_multiyear_physics.pt",
                 "C:/adrishta-66/checkpoints/oceanembed_multiyear_physics.pt",
                 "G:/My Drive/oceanembed_data/checkpoints/oceanembed_multiyear_physics.pt",
-                "checkpoints/oceanembed_multiyear_physics.pt",
             ]
             ckpt_path = None
             for c in raw_candidates:
@@ -148,9 +150,11 @@ def get_model(model_type: str = "physics") -> OceanEmbedNet:
             model = OceanEmbedNet(apply_physics_clamp=False)
             raw_candidates = [
                 os.getenv("OCEANEMBED_BASELINE_CHECKPOINT_PATH"),
+                "/app/checkpoints/oceanembed_multiyear_baseline.pt",
+                "checkpoints/oceanembed_multiyear_baseline.pt",
+                "/tmp/oceanembed_data/checkpoints/oceanembed_multiyear_baseline.pt",
                 "C:/adrishta-66/checkpoints/oceanembed_multiyear_baseline.pt",
                 "G:/My Drive/oceanembed_data/checkpoints/oceanembed_multiyear_baseline.pt",
-                "checkpoints/oceanembed_multiyear_baseline.pt",
             ]
             ckpt_path = None
             for c in raw_candidates:
@@ -180,9 +184,11 @@ def _get_norm_stats() -> Tuple[Dict[str, Any], np.ndarray, np.ndarray]:
     if _NORM_STATS is None:
         raw_candidates = [
             os.getenv("OCEANEMBED_NORM_STATS_PATH"),
-            "G:/My Drive/oceanembed_data/norm_stats_multiyear.json",
-            "C:/adrishta-66/pipeline/norm_stats_multiyear.json",
+            "/app/pipeline/norm_stats_multiyear.json",
             "pipeline/norm_stats_multiyear.json",
+            "/tmp/oceanembed_data/norm_stats_multiyear.json",
+            "C:/adrishta-66/pipeline/norm_stats_multiyear.json",
+            "G:/My Drive/oceanembed_data/norm_stats_multiyear.json",
         ]
         p = None
         for c in raw_candidates:
@@ -209,20 +215,32 @@ def _get_norm_stats() -> Tuple[Dict[str, Any], np.ndarray, np.ndarray]:
 def _get_master_zarr():
     global _MASTER_ZARR_ROOT, _MASTER_ZARR_DATES, _MASTER_ZARR_DTS
     if _MASTER_ZARR_ROOT is None:
+        hf_cache_dir = os.getenv("HF_CACHE_DIR", "/tmp/oceanembed_data" if os.name != "nt" else r"C:\adrishta-66\data")
+        cached_zarr = Path(hf_cache_dir) / "zarr" / "oceanembed_multiyear_2024_2026.zarr"
+        if not cached_zarr.exists():
+            cached_zarr = Path(hf_cache_dir) / "oceanembed_multiyear_2024_2026.zarr"
+
+        if cached_zarr.exists():
+            import zarr
+            _MASTER_ZARR_ROOT = zarr.open_group(str(cached_zarr), mode="r")
+            _MASTER_ZARR_DATES = [str(d) for d in _MASTER_ZARR_ROOT["dates"][:]]
+            _MASTER_ZARR_DTS = [datetime.strptime(d, "%Y-%m-%d") for d in _MASTER_ZARR_DATES]
+            print(f"[OK] Master Zarr opened from local cache: {cached_zarr} ({len(_MASTER_ZARR_DATES)} snapshots)")
+
         # Support Hugging Face Datasets (for Render / Serverless Free Tier)
         hf_repo = os.getenv("HF_DATASET_REPO")
         if hf_repo and _MASTER_ZARR_ROOT is None:
             try:
                 from huggingface_hub import snapshot_download
                 hf_token = os.getenv("HF_TOKEN")
-                hf_cache_dir = os.getenv("HF_CACHE_DIR", "/tmp/oceanembed_data" if os.name != "nt" else r"C:\adrishta-66\data")
                 print(f"[HF] Downloading Master Zarr from Hugging Face Dataset {hf_repo} to {hf_cache_dir}...")
                 local_path = snapshot_download(
                     repo_id=hf_repo,
                     repo_type="dataset",
-                    allow_patterns=["zarr/**", "argo/**", "norm_stats_multiyear.json"],
+                    allow_patterns=["zarr/**", "argo/**", "checkpoints/**", "norm_stats_multiyear.json"],
                     local_dir=hf_cache_dir,
-                    token=hf_token
+                    token=hf_token,
+                    max_workers=8
                 )
                 hf_zarr_path = Path(local_path) / "zarr" / "oceanembed_multiyear_2024_2026.zarr"
                 if not hf_zarr_path.exists():

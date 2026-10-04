@@ -32,19 +32,25 @@ router = APIRouter()
 def _resolve_argo_path(filename: str) -> Path:
     candidates = [
         Path(os.getenv("ARGO_DATA_DIR", "")) / filename,
-        Path("G:/My Drive/oceanembed_data/argo") / filename,
         Path("/tmp/oceanembed_data/argo") / filename,
-        Path(f"C:/adrishta-66/data/argo/{filename}"),
+        Path("/tmp/oceanembed_data") / filename,
+        Path("/app/data/argo") / filename,
         Path(f"data/argo/{filename}"),
+        Path(f"C:/adrishta-66/data/argo/{filename}"),
+        Path("G:/My Drive/oceanembed_data/argo") / filename,
     ]
     for c in candidates:
         if c and c.is_file():
             return c
-    return Path(f"C:/adrishta-66/data/argo/{filename}")
+    return Path("/tmp/oceanembed_data/argo") / filename if os.name != "nt" else Path(f"C:/adrishta-66/data/argo/{filename}")
 
 
-ARGO_FORWARD_PATH = _resolve_argo_path("forward_validation_20260928.json")
-ARGO_HISTORICAL_PATH = _resolve_argo_path("collocation_results.json")
+def __getattr__(name: str) -> Path:
+    if name == "ARGO_FORWARD_PATH":
+        return _resolve_argo_path("forward_validation_20260928.json")
+    elif name == "ARGO_HISTORICAL_PATH":
+        return _resolve_argo_path("collocation_results.json")
+    raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
 
 
 @router.get("/physics/derived")
@@ -213,7 +219,7 @@ def download_profile_netcdf(
     if not prof.get("is_ocean", True):
         raise HTTPException(status_code=400, detail="Cannot export profile for land coordinate.")
 
-    out_dir = Path("C:/adrishta-66/data/exports")
+    out_dir = Path("/tmp/oceanembed_data/exports") if os.name != "nt" else Path("C:/adrishta-66/data/exports")
     out_dir.mkdir(parents=True, exist_ok=True)
     out_file = out_dir / f"adrishta_{model}_profile_{lat}_{lon}_{date}.nc"
     export_profile_to_netcdf(prof, out_file)
