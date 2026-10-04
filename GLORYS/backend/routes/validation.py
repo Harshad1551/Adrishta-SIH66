@@ -38,14 +38,14 @@ def _resolve_data_path(filename: str) -> Path:
     return Path("/tmp/oceanembed_data/argo") / filename if os.name != "nt" else Path(f"C:/adrishta-66/data/argo/{filename}")
 
 
-def __getattr__(name: str) -> Path:
-    if name == "PATH_HISTORICAL_COLLOCATION":
-        return _resolve_data_path("collocation_results.json")
-    elif name == "PATH_FORWARD_PROFILES":
-        return _resolve_data_path("forward_validation_20260928.json")
-    elif name == "PATH_FORWARD_SUMMARY":
-        return _resolve_data_path("forward_validation_summary_20260928.json")
-    raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
+def get_path_historical_collocation() -> Path:
+    return _resolve_data_path("collocation_results.json")
+
+def get_path_forward_profiles() -> Path:
+    return _resolve_data_path("forward_validation_20260928.json")
+
+def get_path_forward_summary() -> Path:
+    return _resolve_data_path("forward_validation_summary_20260928.json")
 
 
 def _haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
@@ -101,9 +101,9 @@ def get_argo_validation_summary(
         return cached
 
     if target_mode == "forward_20260928":
-        if not PATH_FORWARD_SUMMARY.is_file():
+        if not get_path_forward_summary().is_file():
             raise HTTPException(status_code=404, detail="Forward validation summary dataset not found.")
-        with open(str(PATH_FORWARD_SUMMARY), "r", encoding="utf-8") as f:
+        with open(str(get_path_forward_summary()), "r", encoding="utf-8") as f:
             summary = json.load(f)
 
         depth_keys = ["0", "5", "10", "20", "30", "50", "75", "100", "125", "150", "200", "300", "500", "700", "1000"]
@@ -192,9 +192,9 @@ def get_argo_validation_summary(
         return payload
 
     # Historical Benchmark
-    if not PATH_HISTORICAL_COLLOCATION.is_file():
+    if not get_path_historical_collocation().is_file():
         raise HTTPException(status_code=404, detail="Historical ARGO collocation benchmark file not found.")
-    with open(str(PATH_HISTORICAL_COLLOCATION), "r", encoding="utf-8") as f:
+    with open(str(get_path_historical_collocation()), "r", encoding="utf-8") as f:
         data = json.load(f)
 
     models = data.get("models", data.get("models_benchmarking", {}))
@@ -293,9 +293,9 @@ def get_real_argo_floats(
     """
     clean_ds = str(dataset).lower().strip()
     if clean_ds in ["forward_20260928", "forward", "phase6"]:
-        if not PATH_FORWARD_PROFILES.is_file():
+        if not get_path_forward_profiles().is_file():
             raise HTTPException(status_code=404, detail="Forward validation profiles file not found.")
-        with open(str(PATH_FORWARD_PROFILES), "r", encoding="utf-8") as f:
+        with open(str(get_path_forward_profiles()), "r", encoding="utf-8") as f:
             fwd_data = json.load(f)
 
         floats = []
@@ -330,9 +330,9 @@ def get_real_argo_floats(
         }
 
     # Historical
-    if not PATH_HISTORICAL_COLLOCATION.is_file():
+    if not get_path_historical_collocation().is_file():
         raise HTTPException(status_code=404, detail="Historical ARGO collocation file not found.")
-    with open(str(PATH_HISTORICAL_COLLOCATION), "r", encoding="utf-8") as f:
+    with open(str(get_path_historical_collocation()), "r", encoding="utf-8") as f:
         data = json.load(f)
 
     matchups = data.get("collocated_matchups", [])
@@ -388,9 +388,9 @@ def get_single_argo_matchup(
     clean_ds = str(dataset).lower().strip()
 
     if clean_ds in ["forward_20260928", "forward", "phase6"]:
-        if not PATH_FORWARD_PROFILES.is_file():
+        if not get_path_forward_profiles().is_file():
             raise HTTPException(status_code=404, detail="Forward validation profiles file not found.")
-        with open(str(PATH_FORWARD_PROFILES), "r", encoding="utf-8") as f:
+        with open(str(get_path_forward_profiles()), "r", encoding="utf-8") as f:
             fwd_data = json.load(f)
 
         profiles = fwd_data.get("profiles", [])
@@ -441,9 +441,9 @@ def get_single_argo_matchup(
             }
 
     # Historical
-    if not PATH_HISTORICAL_COLLOCATION.is_file():
+    if not get_path_historical_collocation().is_file():
         raise HTTPException(status_code=404, detail="Historical collocation file not found.")
-    with open(str(PATH_HISTORICAL_COLLOCATION), "r", encoding="utf-8") as f:
+    with open(str(get_path_historical_collocation()), "r", encoding="utf-8") as f:
         data = json.load(f)
 
     matchups = data.get("collocated_matchups", [])

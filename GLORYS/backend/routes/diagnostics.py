@@ -45,12 +45,11 @@ def _resolve_argo_path(filename: str) -> Path:
     return Path("/tmp/oceanembed_data/argo") / filename if os.name != "nt" else Path(f"C:/adrishta-66/data/argo/{filename}")
 
 
-def __getattr__(name: str) -> Path:
-    if name == "ARGO_FORWARD_PATH":
-        return _resolve_argo_path("forward_validation_20260928.json")
-    elif name == "ARGO_HISTORICAL_PATH":
-        return _resolve_argo_path("collocation_results.json")
-    raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
+def get_argo_forward_path() -> Path:
+    return _resolve_argo_path("forward_validation_20260928.json")
+
+def get_argo_historical_path() -> Path:
+    return _resolve_argo_path("collocation_results.json")
 
 
 @router.get("/physics/derived")
@@ -177,12 +176,12 @@ def get_observation_gaps(
 ):
     floats = []
     # Prioritize 2026-09-28 forward validation coordinates if date is in 2026
-    if "2026" in date and ARGO_FORWARD_PATH.is_file():
-        with open(str(ARGO_FORWARD_PATH), "r", encoding="utf-8") as f:
+    if "2026" in date and get_argo_forward_path().is_file():
+        with open(str(get_argo_forward_path()), "r", encoding="utf-8") as f:
             db = json.load(f)
             floats = [{"lat": float(p["lat"]), "lon": float(p["lon"])} for p in db.get("profiles", [])]
-    elif ARGO_HISTORICAL_PATH.is_file():
-        with open(str(ARGO_HISTORICAL_PATH), "r", encoding="utf-8") as f:
+    elif get_argo_historical_path().is_file():
+        with open(str(get_argo_historical_path()), "r", encoding="utf-8") as f:
             db = json.load(f)
             floats = [{"lat": float(m["lat"]), "lon": float(m["lon"])} for m in db.get("collocated_matchups", [])]
 

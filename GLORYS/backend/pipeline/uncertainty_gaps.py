@@ -24,6 +24,7 @@ def compute_observation_gap_grid(
     Computes genuine observation gap priority map (0.0 to 1.0)
     combining float distance, model uncertainty, and thermal gradient.
     """
+    subsample = int(subsample or 4)
     root, _, _ = _get_master_zarr()
     if root is None:
         return {"total_evaluated": 0, "priority_grid": [], "recommendations": []}
