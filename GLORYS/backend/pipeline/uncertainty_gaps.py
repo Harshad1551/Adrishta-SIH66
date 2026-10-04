@@ -1,4 +1,4 @@
-﻿"""
+"""
 Spatial Uncertainty Quantification & Observation Gap Priority Engine (Phase 14 & 15)
 Computes spatial priority map based on:
 1. In-situ ARGO float proximity (real positions)

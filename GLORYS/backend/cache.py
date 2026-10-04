@@ -1,4 +1,4 @@
-﻿"""
+"""
 ADRISHTA: Intelligent Multi-Tier Caching Engine
 Supports in-memory LRU caching with optional Redis backend.
 """

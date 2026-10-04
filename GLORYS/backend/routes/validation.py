@@ -11,7 +11,8 @@ import os
 from pathlib import Path
 import json
 import math
-from typing import Optional, List, Dict, Any
+from __future__ import annotations
+from typing import Optional, List, Dict, Any, Tuple
 from fastapi import APIRouter, Query, HTTPException
 
 from backend.cache import cache

@@ -1,4 +1,4 @@
-﻿"""
+"""
 Scientific Feature Attribution & Explainability Engine (Phase 11)
 Computes sensitivity & attribution of subsurface predictions to the 7 surface channels:
 1. sst: Sea Surface Temperature (OSTIA/AVHRR)

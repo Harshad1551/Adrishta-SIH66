@@ -1,4 +1,4 @@
-﻿"""
+"""
 Base Data Adapter with Strict Quality Control & Authoritative Regridding
 Enforces zero silent mock data substitution.
 """

@@ -1,4 +1,4 @@
-﻿"""
+"""
 Marine Heatwave (MHW) & Thermal Anomaly Detection Engine (Phase 12)
 Implements Hobday et al. (2016) standardized Marine Heatwave categorization:
 - Category I: Moderate (1x to 2x threshold)

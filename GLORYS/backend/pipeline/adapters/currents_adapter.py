@@ -1,4 +1,4 @@
-﻿"""
+"""
 Surface Currents (U, V) Real Data Adapter (NASA OSCAR / Copernicus)
 """
 

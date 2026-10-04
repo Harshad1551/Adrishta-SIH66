@@ -1,4 +1,4 @@
-﻿"""
+"""
 Profile Reconstruction & Comparative Benchmarking Endpoint
 Phase 5 Multi-Year Production Checkpoint Inference & Multi-Year Time Series
 Strictly model-driven via frozen OceanEmbed neural predictions.

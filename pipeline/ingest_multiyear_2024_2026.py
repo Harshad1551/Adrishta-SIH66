@@ -1,4 +1,4 @@
-﻿"""
+"""
 Multi-Year (2024, 2025, 2026) Operational Ingestion Engine for OceanEmbed
 Fetches weekly synoptic ocean snapshots directly to Google Drive (oceanembed_data).
 Channels ingested per timestep:

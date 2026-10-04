@@ -1,4 +1,4 @@
-﻿"""
+"""
 3D Ocean Volume Reconstruction & Transect Slicing Engine (Phase 13)
 Generates 3D voxel point clouds for Three.js WebGL volumetric chambers
 and arbitrary vertical transect cuts (Zonal along latitude / Meridional along longitude).

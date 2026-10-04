@@ -1,4 +1,4 @@
-﻿"""
+"""
 Copernicus Marine Batch Downloader for May 2024 (Super El Niño / Marine Heatwave Peak)
 Downloads real daily satellite products directly to Google Drive (oceanembed_data).
 Channels:

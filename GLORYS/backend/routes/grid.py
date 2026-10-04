@@ -1,4 +1,4 @@
-﻿"""
+"""
 Gridded Slice Endpoint: Returns 0.25 deg 2D spatial slice for map and 3D chamber.
 Phase 5 Multi-Year Production Checkpoint Inference with Master 2024-2026 Zarr.
 Strictly returns OceanEmbed neural model predictions (NOT GLORYS target).

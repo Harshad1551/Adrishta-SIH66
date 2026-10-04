@@ -1,4 +1,4 @@
-﻿"""
+"""
 Authoritative Grid & Channel Specification for OceanEmbed (INCOIS SIH-01)
 Single source of truth across Data Ingestion, Zarr Storage, Model Training,
 Inference, and Frontend API.

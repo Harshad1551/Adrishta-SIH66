@@ -1,4 +1,4 @@
-﻿"""
+"""
 SSS Real Data Adapter (SMAP / Copernicus)
 """
 

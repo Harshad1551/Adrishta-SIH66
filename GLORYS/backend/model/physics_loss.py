@@ -1,4 +1,4 @@
-﻿"""
+"""
 Physics-Informed Ocean Loss Functions (Phase 6)
 Implements: L_total = L_data + lambda * L_physics
 

@@ -1,4 +1,4 @@
-﻿from pipeline.adapters.base_adapter import BaseSurfaceAdapter, AdapterResult
+from pipeline.adapters.base_adapter import BaseSurfaceAdapter, AdapterResult
 from pipeline.adapters.sst_adapter import SSTAdapter
 from pipeline.adapters.sss_adapter import SSSAdapter
 from pipeline.adapters.ssh_adapter import SSHAdapter

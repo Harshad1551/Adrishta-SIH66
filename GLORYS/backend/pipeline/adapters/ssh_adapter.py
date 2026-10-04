@@ -1,4 +1,4 @@
-﻿"""
+"""
 SSH / SLA Real Data Adapter (DUACS / Copernicus)
 """
 

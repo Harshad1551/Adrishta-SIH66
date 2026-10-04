@@ -1,4 +1,4 @@
-﻿"""
+"""
 SST Real Data Adapter (OSTIA / Copernicus)
 """
 

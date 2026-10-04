@@ -1,4 +1,4 @@
-﻿"""
+"""
 Consistent Zarr Harmonization & Canonical Storage Engine (Phase 1 & 2)
 Unifies data ingestion, QC, storage schema, model training, and inference.
 """

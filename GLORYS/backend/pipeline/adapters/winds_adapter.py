@@ -1,4 +1,4 @@
-﻿"""
+"""
 Surface Winds (U, V) Real Data Adapter (NASA CCMP / Copernicus)
 """
 

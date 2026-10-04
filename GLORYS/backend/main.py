@@ -1,4 +1,4 @@
-﻿"""
+"""
 ADRISHTA: Real Ocean AI API Server (FastAPI)
 Serves 15-depth physical ocean reconstruction, ARGO collocations, and attribution.
 Production-grade real data integration: Zero synthetic data fallback in REAL mode.

@@ -1,4 +1,4 @@
-﻿"""
+"""
 Aligned Training Sample Generator & PyTorch Dataset (Phase 4)
 In-Memory Fast Tensor Caching for Sub-Second Epoch Training.
 """

@@ -1,4 +1,4 @@
-﻿"""
+"""
 GLORYS12V1 Supervised Training Target Adapter (Phase 3)
 Role: TRAINING TARGET & REANALYSIS REFERENCE ONLY.
 CRITICAL: Never treat GLORYS as independent validation when used for model loss supervision.
