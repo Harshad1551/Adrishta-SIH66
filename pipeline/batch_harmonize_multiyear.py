@@ -1,4 +1,4 @@
-"""
+r"""
 Phase 1: Canonical Zarr Harmonization & Batch Preprocessing Engine
 Harmonizes multi-year (2024-2026) raw NetCDF observations into an authoritative,
 chunked, fast-access Zarr dataset for PyTorch training and inference.

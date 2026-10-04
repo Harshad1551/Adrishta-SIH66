@@ -1,4 +1,6 @@
+from __future__ import annotations
 """
+
 ARGO Matchup Validation Endpoint (Phases 4, 5 & 6)
 Serves real independent in-situ collocations from Coriolis GDAC / INCOIS float array.
 Supports both:
@@ -11,7 +13,6 @@ import os
 from pathlib import Path
 import json
 import math
-from __future__ import annotations
 from typing import Optional, List, Dict, Any, Tuple
 from fastapi import APIRouter, Query, HTTPException
 
