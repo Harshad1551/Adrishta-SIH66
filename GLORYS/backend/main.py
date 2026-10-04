@@ -10,7 +10,8 @@ import threading
 from pathlib import Path
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, Response, Request, HTTPException
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
@@ -53,7 +54,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -64,6 +65,30 @@ app.include_router(grid.router, prefix="/api/v1", tags=["Gridded Fields"])
 app.include_router(validation.router, prefix="/api/v1", tags=["ARGO Validation"])
 app.include_router(diagnostics.router, prefix="/api/v1", tags=["Scientific Diagnostics & Export"])
 app.include_router(auth.router, prefix="/api/v1", tags=["User Authentication & Workspace"])
+
+@app.exception_handler(HTTPException)
+async def custom_http_exception_handler(request: Request, exc: HTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail},
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*",
+            "Access-Control-Allow-Headers": "*",
+        },
+    )
+
+@app.exception_handler(Exception)
+async def custom_generic_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=500,
+        content={"detail": str(exc), "error_type": type(exc).__name__},
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*",
+            "Access-Control-Allow-Headers": "*",
+        },
+    )
 
 
 @app.get("/")
@@ -97,7 +122,11 @@ def health_check():
     Production health & diagnostics endpoint:
     Reports external storage status, model checkpoints, and normalization integrity.
     """
-    root, dates, dts = _get_master_zarr()
+    try:
+        root, dates, dts = _get_master_zarr()
+    except Exception as e:
+        print(f"[!] health_check non-blocking Zarr warning: {e}")
+        root, dates, dts = None, None, None
     zarr_available = root is not None and dates is not None and len(dates) > 0
 
     phys_candidates = [

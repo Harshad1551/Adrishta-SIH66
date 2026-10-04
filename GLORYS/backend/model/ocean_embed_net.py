@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 
 import numpy as np
+import threading
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -101,6 +102,7 @@ _NORM_STATS: Optional[Dict[str, Any]] = None
 _CH_MEANS: Optional[np.ndarray] = None
 _CH_STDS: Optional[np.ndarray] = None
 _MASTER_ZARR_ROOT = None
+_ZARR_LOCK = threading.Lock()
 _MASTER_ZARR_DATES: Optional[List[str]] = None
 _MASTER_ZARR_DTS: Optional[List[datetime]] = None
 
@@ -214,33 +216,47 @@ def _get_norm_stats() -> Tuple[Dict[str, Any], np.ndarray, np.ndarray]:
 
 def _get_master_zarr():
     global _MASTER_ZARR_ROOT, _MASTER_ZARR_DATES, _MASTER_ZARR_DTS
-    if _MASTER_ZARR_ROOT is None:
-        hf_cache_dir = os.getenv("HF_CACHE_DIR", "/tmp/oceanembed_data" if os.name != "nt" else r"C:\adrishta-66\data")
-        cached_zarr = Path(hf_cache_dir) / "zarr" / "oceanembed_multiyear_2024_2026.zarr"
+    if _MASTER_ZARR_ROOT is not None:
+        return _MASTER_ZARR_ROOT, _MASTER_ZARR_DATES, _MASTER_ZARR_DTS
+
+    with _ZARR_LOCK:
+        if _MASTER_ZARR_ROOT is not None:
+            return _MASTER_ZARR_ROOT, _MASTER_ZARR_DATES, _MASTER_ZARR_DTS
+
+        hf_cache_dir = Path(os.getenv("HF_CACHE_DIR", "/tmp/oceanembed_data" if os.name != "nt" else r"C:\adrishta-66\data"))
+        cached_zarr = hf_cache_dir / "zarr" / "oceanembed_multiyear_2024_2026.zarr"
         if not cached_zarr.exists():
-            cached_zarr = Path(hf_cache_dir) / "oceanembed_multiyear_2024_2026.zarr"
+            cached_zarr = hf_cache_dir / "oceanembed_multiyear_2024_2026.zarr"
+        marker_file = hf_cache_dir / ".download_complete"
 
-        if cached_zarr.exists():
-            import zarr
-            _MASTER_ZARR_ROOT = zarr.open_group(str(cached_zarr), mode="r")
-            _MASTER_ZARR_DATES = [str(d) for d in _MASTER_ZARR_ROOT["dates"][:]]
-            _MASTER_ZARR_DTS = [datetime.strptime(d, "%Y-%m-%d") for d in _MASTER_ZARR_DATES]
-            print(f"[OK] Master Zarr opened from local cache: {cached_zarr} ({len(_MASTER_ZARR_DATES)} snapshots)")
+        # Check if local cache is ready AND marked complete
+        if cached_zarr.exists() and marker_file.exists():
+            try:
+                import zarr
+                _MASTER_ZARR_ROOT = zarr.open_group(str(cached_zarr), mode="r")
+                _MASTER_ZARR_DATES = [str(d) for d in _MASTER_ZARR_ROOT["dates"][:]]
+                _MASTER_ZARR_DTS = [datetime.strptime(d, "%Y-%m-%d") for d in _MASTER_ZARR_DATES]
+                print(f"[OK] Master Zarr opened from local cache: {cached_zarr} ({len(_MASTER_ZARR_DATES)} snapshots)")
+                return _MASTER_ZARR_ROOT, _MASTER_ZARR_DATES, _MASTER_ZARR_DTS
+            except Exception as e:
+                print(f"[!] Local cache not readable yet: {e}")
+                _MASTER_ZARR_ROOT = None
 
-        # Support Hugging Face Datasets (for Render / Serverless Free Tier)
+        # Download from Hugging Face if configured
         hf_repo = os.getenv("HF_DATASET_REPO")
         if hf_repo and _MASTER_ZARR_ROOT is None:
             try:
                 from huggingface_hub import snapshot_download
                 hf_token = os.getenv("HF_TOKEN")
+                hf_cache_dir.mkdir(parents=True, exist_ok=True)
                 print(f"[HF] Downloading Master Zarr from Hugging Face Dataset {hf_repo} to {hf_cache_dir}...")
                 local_path = snapshot_download(
                     repo_id=hf_repo,
                     repo_type="dataset",
                     allow_patterns=["zarr/**", "argo/**", "checkpoints/**", "norm_stats_multiyear.json"],
-                    local_dir=hf_cache_dir,
+                    local_dir=str(hf_cache_dir),
                     token=hf_token,
-                    max_workers=8
+                    max_workers=12
                 )
                 hf_zarr_path = Path(local_path) / "zarr" / "oceanembed_multiyear_2024_2026.zarr"
                 if not hf_zarr_path.exists():
@@ -250,11 +266,14 @@ def _get_master_zarr():
                     _MASTER_ZARR_ROOT = zarr.open_group(str(hf_zarr_path), mode="r")
                     _MASTER_ZARR_DATES = [str(d) for d in _MASTER_ZARR_ROOT["dates"][:]]
                     _MASTER_ZARR_DTS = [datetime.strptime(d, "%Y-%m-%d") for d in _MASTER_ZARR_DATES]
+                    marker_file.write_text("ok", encoding="utf-8")
                     print(f"[OK] Master Zarr opened from Hugging Face cache {hf_zarr_path} ({len(_MASTER_ZARR_DATES)} snapshots)")
+                    return _MASTER_ZARR_ROOT, _MASTER_ZARR_DATES, _MASTER_ZARR_DTS
             except Exception as e:
                 print(f"[!] Error loading Master Zarr from Hugging Face {hf_repo}: {e}")
                 _MASTER_ZARR_ROOT = None
 
+        # Fallback candidates
         zarr_env = os.getenv("OCEANEMBED_ZARR_PATH")
         zarr_uri = os.getenv("ZARR_STORAGE_URI")
         raw_candidates = [
@@ -264,41 +283,17 @@ def _get_master_zarr():
             "C:/adrishta-66/data/zarr/oceanembed_multiyear_2024_2026.zarr",
             "data/zarr/oceanembed_multiyear_2024_2026.zarr",
         ]
-        p = None
         for c in raw_candidates:
             if c and Path(c).is_dir():
-                p = Path(c)
-                break
-
-        # Support direct Google Cloud Storage (GCS) gs:// URIs
-        gcs_uri = zarr_env if (zarr_env and zarr_env.startswith("gs://")) else (zarr_uri if (zarr_uri and zarr_uri.startswith("gs://")) else None)
-        if gcs_uri and _MASTER_ZARR_ROOT is None:
-            try:
-                import zarr
-                import gcsfs
-                fs = gcsfs.GCSFileSystem()
-                store = gcsfs.GCSMap(gcs_uri.replace("gs://", ""), gcs=fs)
-                _MASTER_ZARR_ROOT = zarr.open_group(store, mode="r")
-                _MASTER_ZARR_DATES = [str(d) for d in _MASTER_ZARR_ROOT["dates"][:]]
-                _MASTER_ZARR_DTS = [datetime.strptime(d, "%Y-%m-%d") for d in _MASTER_ZARR_DATES]
-                print(f"[OK] Master Zarr opened from GCS bucket {gcs_uri} ({len(_MASTER_ZARR_DATES)} snapshots)")
-            except Exception as e:
-                print(f"[!] Error opening master zarr from GCS {gcs_uri}: {e}")
-                _MASTER_ZARR_ROOT = None
-
-        if p is not None and _MASTER_ZARR_ROOT is None:
-            try:
-                import zarr
-                _MASTER_ZARR_ROOT = zarr.open_group(str(p), mode="r")
-                _MASTER_ZARR_DATES = [str(d) for d in _MASTER_ZARR_ROOT["dates"][:]]
-                _MASTER_ZARR_DTS = [datetime.strptime(d, "%Y-%m-%d") for d in _MASTER_ZARR_DATES]
-                print(f"[OK] Master Zarr opened from {p} ({len(_MASTER_ZARR_DATES)} snapshots)")
-            except Exception as e:
-                print(f"[!] Error opening master zarr: {e}")
-                _MASTER_ZARR_ROOT = None
-    return _MASTER_ZARR_ROOT, _MASTER_ZARR_DATES, _MASTER_ZARR_DTS
-
-
+                try:
+                    import zarr
+                    _MASTER_ZARR_ROOT = zarr.open_group(str(c), mode="r")
+                    _MASTER_ZARR_DATES = [str(d) for d in _MASTER_ZARR_ROOT["dates"][:]]
+                    _MASTER_ZARR_DTS = [datetime.strptime(d, "%Y-%m-%d") for d in _MASTER_ZARR_DATES]
+                    print(f"[OK] Master Zarr opened from candidate path {c} ({len(_MASTER_ZARR_DATES)} snapshots)")
+                    return _MASTER_ZARR_ROOT, _MASTER_ZARR_DATES, _MASTER_ZARR_DTS
+                except Exception:
+                    _MASTER_ZARR_ROOT = None
 def calculate_sound_speed(temp_c: float, salinity_psu: float, depth_m: float) -> float:
     """Mackenzie (1981) sound speed equation."""
     t, s, d = temp_c, salinity_psu, depth_m
