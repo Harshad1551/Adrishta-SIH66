@@ -1,0 +1,245 @@
+{
+  "dataset": "North Indian Ocean (0.25 deg Daily)",
+  "train_samples": 19472,
+  "val_samples": 4869,
+  "epochs": 15,
+  "batch_size": 128,
+  "models": {
+    "baseline_cnn": {
+      "checkpoint": "c:\\adrishta-66\\checkpoints\\oceanembed_baseline.pt",
+      "metrics": {
+        "rmse_degC": 0.316,
+        "mae_degC": 0.2123,
+        "inversion_violation_rate_pct": 0.0,
+        "max_gradient_degC_per_m": 0.3232
+      },
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 99.8573,
+          "val_rmse": 0.6996,
+          "inversion_rate": 0.0,
+          "time_sec": 1.02
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.8139,
+          "val_rmse": 0.5055,
+          "inversion_rate": 0.0,
+          "time_sec": 0.93
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.642,
+          "val_rmse": 0.516,
+          "inversion_rate": 0.0,
+          "time_sec": 1.0
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.6076,
+          "val_rmse": 0.4815,
+          "inversion_rate": 0.0,
+          "time_sec": 0.98
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.598,
+          "val_rmse": 0.4904,
+          "inversion_rate": 0.0,
+          "time_sec": 0.92
+        },
+        {
+          "epoch": 6,
+          "train_loss": 0.5743,
+          "val_rmse": 0.4831,
+          "inversion_rate": 0.0,
+          "time_sec": 0.92
+        },
+        {
+          "epoch": 7,
+          "train_loss": 0.5488,
+          "val_rmse": 0.4531,
+          "inversion_rate": 0.0,
+          "time_sec": 0.95
+        },
+        {
+          "epoch": 8,
+          "train_loss": 0.5369,
+          "val_rmse": 0.4329,
+          "inversion_rate": 0.0,
+          "time_sec": 0.92
+        },
+        {
+          "epoch": 9,
+          "train_loss": 0.4903,
+          "val_rmse": 0.3934,
+          "inversion_rate": 0.0,
+          "time_sec": 0.94
+        },
+        {
+          "epoch": 10,
+          "train_loss": 0.4362,
+          "val_rmse": 0.3567,
+          "inversion_rate": 0.0,
+          "time_sec": 1.07
+        },
+        {
+          "epoch": 11,
+          "train_loss": 0.4054,
+          "val_rmse": 0.3456,
+          "inversion_rate": 0.0,
+          "time_sec": 0.94
+        },
+        {
+          "epoch": 12,
+          "train_loss": 0.3833,
+          "val_rmse": 0.3435,
+          "inversion_rate": 0.0,
+          "time_sec": 0.87
+        },
+        {
+          "epoch": 13,
+          "train_loss": 0.3677,
+          "val_rmse": 0.3637,
+          "inversion_rate": 0.0,
+          "time_sec": 0.93
+        },
+        {
+          "epoch": 14,
+          "train_loss": 0.3506,
+          "val_rmse": 0.3183,
+          "inversion_rate": 0.0,
+          "time_sec": 1.0
+        },
+        {
+          "epoch": 15,
+          "train_loss": 0.3352,
+          "val_rmse": 0.316,
+          "inversion_rate": 0.0,
+          "time_sec": 1.05
+        }
+      ]
+    },
+    "physics_constrained_cnn": {
+      "checkpoint": "c:\\adrishta-66\\checkpoints\\oceanembed_physics_constrained.pt",
+      "metrics": {
+        "rmse_degC": 0.3239,
+        "mae_degC": 0.2188,
+        "inversion_violation_rate_pct": 0.0,
+        "max_gradient_degC_per_m": 0.334
+      },
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 91.8751,
+          "val_rmse": 0.7059,
+          "inversion_rate": 0.0,
+          "time_sec": 1.06
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.8876,
+          "val_rmse": 0.5251,
+          "inversion_rate": 0.0,
+          "time_sec": 1.04
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.6744,
+          "val_rmse": 0.4885,
+          "inversion_rate": 0.0,
+          "time_sec": 0.98
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.612,
+          "val_rmse": 0.4682,
+          "inversion_rate": 0.0,
+          "time_sec": 1.18
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.5727,
+          "val_rmse": 0.4528,
+          "inversion_rate": 0.0,
+          "time_sec": 1.03
+        },
+        {
+          "epoch": 6,
+          "train_loss": 0.522,
+          "val_rmse": 0.4191,
+          "inversion_rate": 0.0,
+          "time_sec": 1.05
+        },
+        {
+          "epoch": 7,
+          "train_loss": 0.4829,
+          "val_rmse": 0.4021,
+          "inversion_rate": 0.0,
+          "time_sec": 1.09
+        },
+        {
+          "epoch": 8,
+          "train_loss": 0.448,
+          "val_rmse": 0.3635,
+          "inversion_rate": 0.0,
+          "time_sec": 1.06
+        },
+        {
+          "epoch": 9,
+          "train_loss": 0.4283,
+          "val_rmse": 0.3571,
+          "inversion_rate": 0.0,
+          "time_sec": 1.01
+        },
+        {
+          "epoch": 10,
+          "train_loss": 0.4071,
+          "val_rmse": 0.3436,
+          "inversion_rate": 0.0,
+          "time_sec": 1.05
+        },
+        {
+          "epoch": 11,
+          "train_loss": 0.3917,
+          "val_rmse": 0.3413,
+          "inversion_rate": 0.0,
+          "time_sec": 1.13
+        },
+        {
+          "epoch": 12,
+          "train_loss": 0.3668,
+          "val_rmse": 0.323,
+          "inversion_rate": 0.0,
+          "time_sec": 1.02
+        },
+        {
+          "epoch": 13,
+          "train_loss": 0.3531,
+          "val_rmse": 0.3179,
+          "inversion_rate": 0.0,
+          "time_sec": 1.03
+        },
+        {
+          "epoch": 14,
+          "train_loss": 0.336,
+          "val_rmse": 0.3142,
+          "inversion_rate": 0.0,
+          "time_sec": 1.04
+        },
+        {
+          "epoch": 15,
+          "train_loss": 0.3209,
+          "val_rmse": 0.3239,
+          "inversion_rate": 0.0,
+          "time_sec": 1.01
+        }
+      ]
+    }
+  },
+  "scientific_gain": {
+    "rmse_reduction_degC": -0.0079,
+    "inversion_eliminated_pct": 0.0
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "audit_timestamp": "2026-10-04 00:54:29 UTC",
+  "status": "VERIFIED_AND_AUDITED",
+  "evaluation_dataset": {
+    "name": "OceanEmbed Multi-Year Zarr Store",
+    "path": "G:\\My Drive\\oceanembed_data\\zarr\\oceanembed_multiyear_2024_2026.zarr",
+    "split": "val_2025_out_of_sample",
+    "timeframe": "2025-01-05 to 2025-12-28 (52 weekly snapshots)",
+    "soundings_evaluated": 118300,
+    "spatial_stride": 2,
+    "full_depth_only": true,
+    "depth_range_m": [
+      0.0,
+      1000.0
+    ]
+  },
+  "depth_grid_m": [
+    0.0,
+    5.0,
+    10.0,
+    20.0,
+    30.0,
+    50.0,
+    75.0,
+    100.0,
+    125.0,
+    150.0,
+    200.0,
+    300.0,
+    500.0,
+    700.0,
+    1000.0
+  ],
+  "metric_definition": "Delta = Baseline_RMSE - Physics_Constrained_RMSE. Positive indicates improvement/reduction in error; negative indicates degradation.",
+  "models": {
+    "baseline": {
+      "checkpoint": "C:\\adrishta-66\\checkpoints\\oceanembed_multiyear_baseline.pt",
+      "overall_rmse_deg_c": 0.9559,
+      "overall_mae_deg_c": 0.6655,
+      "r2_score": 0.9838,
+      "inversion_violation_rate_pct": 0.0,
+      "regime_rmse_deg_c": {
+        "mixed_layer_0_30m": 0.5369,
+        "thermocline_50_200m": 1.2868,
+        "abyssal_300_1000m": 0.7631
+      },
+      "depth_rmse_deg_c": {
+        "0m": 0.4584,
+        "5m": 0.4901,
+        "10m": 0.4815,
+        "20m": 0.4871,
+        "30m": 0.7222,
+        "50m": 1.1698,
+        "75m": 1.3673,
+        "100m": 1.4868,
+        "125m": 1.4154,
+        "150m": 1.1964,
+        "200m": 1.0259,
+        "300m": 0.8669,
+        "500m": 0.7034,
+        "700m": 0.7959,
+        "1000m": 0.6705
+      }
+    },
+    "physics_constrained": {
+      "checkpoint": "C:\\adrishta-66\\checkpoints\\oceanembed_multiyear_physics.pt",
+      "overall_rmse_deg_c": 0.927,
+      "overall_mae_deg_c": 0.6616,
+      "r2_score": 0.9849,
+      "inversion_violation_rate_pct": 0.0,
+      "regime_rmse_deg_c": {
+        "mixed_layer_0_30m": 0.642,
+        "thermocline_50_200m": 1.2249,
+        "abyssal_300_1000m": 0.6759
+      },
+      "depth_rmse_deg_c": {
+        "0m": 0.4889,
+        "5m": 0.6653,
+        "10m": 0.6145,
+        "20m": 0.6251,
+        "30m": 0.7815,
+        "50m": 1.168,
+        "75m": 1.3231,
+        "100m": 1.3543,
+        "125m": 1.2524,
+        "150m": 1.1712,
+        "200m": 1.055,
+        "300m": 0.8108,
+        "500m": 0.6301,
+        "700m": 0.6041,
+        "1000m": 0.6388
+      }
+    }
+  },
+  "deltas_deg_c": {
+    "overall_rmse": 0.0289,
+    "overall_mae": 0.0039,
+    "mixed_layer_0_30m": -0.1051,
+    "thermocline_50_200m": 0.062,
+    "abyssal_300_1000m": 0.0872,
+    "depth_level_deltas": {
+      "0m": -0.0305,
+      "5m": -0.1752,
+      "10m": -0.133,
+      "20m": -0.138,
+      "30m": -0.0593,
+      "50m": 0.0018,
+      "75m": 0.0442,
+      "100m": 0.1325,
+      "125m": 0.1631,
+      "150m": 0.0253,
+      "200m": -0.0292,
+      "300m": 0.0562,
+      "500m": 0.0733,
+      "700m": 0.1918,
+      "1000m": 0.0316
+    }
+  }
+}

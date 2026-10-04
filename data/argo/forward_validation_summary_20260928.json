@@ -1,0 +1,228 @@
+{
+  "date": "2026-09-28",
+  "total_profiles": 18,
+  "total_soundings": 248,
+  "overall": {
+    "rmse_phys": 0.8807,
+    "rmse_base": 0.9379,
+    "delta_rmse": 0.0573,
+    "mae_phys": 0.6607,
+    "mae_base": 0.6934,
+    "delta_mae": 0.0326,
+    "mbe_phys": 0.0233,
+    "mbe_base": -0.1145,
+    "r2_phys": 0.9851,
+    "r2_base": 0.9831
+  },
+  "layer_wise": {
+    "mixed_layer_0_30m": {
+      "rmse_phys": 0.6336,
+      "rmse_base": 0.5208,
+      "delta_rmse": -0.1129,
+      "mae_phys": 0.4561,
+      "mae_base": 0.3399,
+      "delta_mae": -0.1162,
+      "n": 90
+    },
+    "thermocline_50_200m": {
+      "rmse_phys": 1.0467,
+      "rmse_base": 1.1615,
+      "delta_rmse": 0.1148,
+      "mae_phys": 0.8291,
+      "mae_base": 0.9446,
+      "delta_mae": 0.1155,
+      "n": 105
+    },
+    "abyssal_300_1000m": {
+      "rmse_phys": 0.8814,
+      "rmse_base": 0.9916,
+      "delta_rmse": 0.1101,
+      "mae_phys": 0.6746,
+      "mae_base": 0.7959,
+      "delta_mae": 0.1212,
+      "n": 53
+    }
+  },
+  "depth_wise": {
+    "0": {
+      "n": 18,
+      "rmse_phys": 0.517,
+      "rmse_base": 0.4536,
+      "delta_rmse": -0.0634,
+      "mae_phys": 0.3598,
+      "mae_base": 0.2993,
+      "delta_mae": -0.0605,
+      "bias_phys": 0.0279,
+      "bias_base": -0.0651
+    },
+    "5": {
+      "n": 18,
+      "rmse_phys": 0.7152,
+      "rmse_base": 0.5471,
+      "delta_rmse": -0.1681,
+      "mae_phys": 0.4983,
+      "mae_base": 0.3754,
+      "delta_mae": -0.1229,
+      "bias_phys": 0.0631,
+      "bias_base": -0.1094
+    },
+    "10": {
+      "n": 18,
+      "rmse_phys": 0.6799,
+      "rmse_base": 0.5945,
+      "delta_rmse": -0.0854,
+      "mae_phys": 0.4914,
+      "mae_base": 0.3603,
+      "delta_mae": -0.1311,
+      "bias_phys": 0.1059,
+      "bias_base": -0.0641
+    },
+    "20": {
+      "n": 18,
+      "rmse_phys": 0.4227,
+      "rmse_base": 0.2469,
+      "delta_rmse": -0.1759,
+      "mae_phys": 0.3764,
+      "mae_base": 0.1786,
+      "delta_mae": -0.1978,
+      "bias_phys": 0.1596,
+      "bias_base": -0.0412
+    },
+    "30": {
+      "n": 18,
+      "rmse_phys": 0.7666,
+      "rmse_base": 0.6606,
+      "delta_rmse": -0.1059,
+      "mae_phys": 0.5548,
+      "mae_base": 0.4859,
+      "delta_mae": -0.0689,
+      "bias_phys": 0.3914,
+      "bias_base": 0.1368
+    },
+    "50": {
+      "n": 18,
+      "rmse_phys": 1.2599,
+      "rmse_base": 1.2748,
+      "delta_rmse": 0.0149,
+      "mae_phys": 0.9106,
+      "mae_base": 1.0002,
+      "delta_mae": 0.0896,
+      "bias_phys": 0.4527,
+      "bias_base": 0.3295
+    },
+    "75": {
+      "n": 18,
+      "rmse_phys": 1.2004,
+      "rmse_base": 1.2129,
+      "delta_rmse": 0.0125,
+      "mae_phys": 1.0027,
+      "mae_base": 1.0071,
+      "delta_mae": 0.0043,
+      "bias_phys": 0.4947,
+      "bias_base": 0.2682
+    },
+    "100": {
+      "n": 18,
+      "rmse_phys": 0.9844,
+      "rmse_base": 1.1568,
+      "delta_rmse": 0.1724,
+      "mae_phys": 0.8215,
+      "mae_base": 0.9164,
+      "delta_mae": 0.0949,
+      "bias_phys": -0.2679,
+      "bias_base": -0.5117
+    },
+    "125": {
+      "n": 18,
+      "rmse_phys": 1.039,
+      "rmse_base": 1.2089,
+      "delta_rmse": 0.1699,
+      "mae_phys": 0.8191,
+      "mae_base": 0.9275,
+      "delta_mae": 0.1084,
+      "bias_phys": -0.4096,
+      "bias_base": -0.7027
+    },
+    "150": {
+      "n": 18,
+      "rmse_phys": 0.8511,
+      "rmse_base": 1.0241,
+      "delta_rmse": 0.173,
+      "mae_phys": 0.7221,
+      "mae_base": 0.8873,
+      "delta_mae": 0.1652,
+      "bias_phys": -0.3929,
+      "bias_base": -0.6017
+    },
+    "200": {
+      "n": 15,
+      "rmse_phys": 0.841,
+      "rmse_base": 1.0536,
+      "delta_rmse": 0.2126,
+      "mae_phys": 0.6725,
+      "mae_base": 0.9264,
+      "delta_mae": 0.2539,
+      "bias_phys": -0.3589,
+      "bias_base": -0.3901
+    },
+    "300": {
+      "n": 14,
+      "rmse_phys": 0.9835,
+      "rmse_base": 1.067,
+      "delta_rmse": 0.0835,
+      "mae_phys": 0.7021,
+      "mae_base": 0.8517,
+      "delta_mae": 0.1496,
+      "bias_phys": -0.3607,
+      "bias_base": -0.2961
+    },
+    "500": {
+      "n": 13,
+      "rmse_phys": 0.8967,
+      "rmse_base": 0.977,
+      "delta_rmse": 0.0803,
+      "mae_phys": 0.5836,
+      "mae_base": 0.7298,
+      "delta_mae": 0.1462,
+      "bias_phys": -0.2159,
+      "bias_base": -0.1772
+    },
+    "700": {
+      "n": 13,
+      "rmse_phys": 0.7284,
+      "rmse_base": 0.9758,
+      "delta_rmse": 0.2475,
+      "mae_phys": 0.5795,
+      "mae_base": 0.7478,
+      "delta_mae": 0.1682,
+      "bias_phys": -0.0291,
+      "bias_base": -0.0107
+    },
+    "1000": {
+      "n": 13,
+      "rmse_phys": 0.8896,
+      "rmse_base": 0.9358,
+      "delta_rmse": 0.0462,
+      "mae_phys": 0.8312,
+      "mae_base": 0.8498,
+      "delta_mae": 0.0187,
+      "bias_phys": 0.6259,
+      "bias_base": 0.6577
+    }
+  },
+  "profile_level": {
+    "wins_rmse_phys": 13,
+    "wins_rmse_base": 5,
+    "ties_rmse": 0,
+    "wins_mae_phys": 11,
+    "wins_mae_base": 7,
+    "ties_mae": 0
+  },
+  "physical_consistency": {
+    "physics_inversions": 0,
+    "baseline_inversions": 0,
+    "physics_max_lapse": 0.1623,
+    "baseline_max_lapse": 0.1354,
+    "statement": "No temperature-stratification inversion violations under the defined criterion."
+  }
+}

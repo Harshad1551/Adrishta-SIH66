@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: adrishta-backend
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: HF_DATASET_REPO
+        sync: false # Set in Render Dashboard: your-username/oceanembed-data
+      - key: HF_TOKEN
+        sync: false # Optional if HF dataset is public
+      - key: PYTHONPATH
+        value: /app/GLORYS
+      - key: FAIL_CLOSED_MODE
+        value: "true"

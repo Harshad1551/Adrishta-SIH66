@@ -1,0 +1,38 @@
+# Environment variables & secrets
+.env
+.env.local
+*.env
+
+# Dependencies & build outputs
+node_modules/
+frontend/node_modules/
+frontend/.output/
+frontend/.vercel/
+frontend/dist/
+frontend/.nitro/
+frontend/.wrangler/
+
+# Python cache & virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+
+# Large scientific data (stored on Hugging Face / G Drive)
+*.nc
+*.nc4
+*.zarr/
+raw/
+data/raw/
+
+# Testing & Logs
+.pytest_cache/
+*.log
+scratch/
+.DS_Store
+Thumbs.db
