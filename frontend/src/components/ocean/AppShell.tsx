@@ -200,29 +200,16 @@ export function AppShell({ children }: { children: ReactNode }) {
                   {current.title}
                 </h1>
                 {/* Concise Scientific Status Indicator */}
-                <button
-                  onClick={() => setDataMode(dataMode === "mock" ? "real" : "mock")}
-                  className={cn(
-                    "hidden sm:inline-flex items-center gap-2 rounded-full px-3 py-1 text-[10px] font-mono border transition-all hover:opacity-90",
-                    dataMode === "real"
-                      ? "bg-teal/10 text-teal border-teal/30"
-                      : "bg-primary/10 text-primary border-primary/30",
-                  )}
-                  title="Click to toggle between Real Observation Data and Synthetic Demo Data" suppressHydrationWarning
+                <div
+                  className="hidden sm:inline-flex items-center gap-2 rounded-full px-3 py-1 text-[10px] font-mono border bg-teal/10 text-teal border-teal/30 shadow-xs"
+                  title="Operational Production Mode: Strictly serving real multi-year satellite observations and Coriolis ARGO floats."
                 >
-                  <span
-                    className={cn(
-                      "h-2 w-2 rounded-full",
-                      dataMode === "real" ? "bg-teal animate-pulse" : "bg-primary",
-                    )}
-                  />
-                  <span className="font-bold">
-                    {dataMode === "real" ? "? REAL DATA" : "? DEMO DATA"}
-                  </span>
+                  <span className="h-2 w-2 rounded-full bg-teal animate-pulse" />
+                  <span className="font-bold tracking-wider">● REAL OBSERVATION DATA</span>
                   <span className="text-muted-foreground/80 font-sans border-l border-border/60 pl-1.5 text-[9px]">
-                    {dataMode === "real" ? `Multi-Year (2024–2026) | ${date}` : "Synthetic prototype data"}
+                    Multi-Year (2024–2026) | {date}
                   </span>
-                </button>
+                </div>
                 
               </div>
               <p className="hidden sm:block truncate text-[11px] text-muted-foreground">
