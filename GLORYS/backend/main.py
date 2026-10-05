@@ -59,6 +59,23 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.middleware("http")
+async def add_cdn_cache_control_header(request: Request, call_next):
+    response = await call_next(request)
+    if request.method == "GET" and response.status_code == 200:
+        path = request.url.path
+        if any(path.startswith(p) for p in [
+            "/api/v1/reconstruction",
+            "/api/v1/validation",
+            "/api/v1/physics",
+            "/api/v1/intelligence",
+            "/api/v1/diagnostics",
+            "/api/v1/model"
+        ]):
+            # Cache responses for 24h in browser, 7 days on CDN Edge
+            response.headers["Cache-Control"] = "public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400"
+    return response
+
 # Register API Route Modules
 app.include_router(profile.router, prefix="/api/v1", tags=["Profile Reconstruction"])
 app.include_router(grid.router, prefix="/api/v1", tags=["Gridded Fields"])
